@@ -1,12 +1,26 @@
-// app.js
-const express = require("express");
+// smartfarm.js
+const express = require('express');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-  res.send("Smart Farm API running");
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+const authRoutes = require('./routes/auth.routes');
+app.use('/auth', authRoutes);
+
+// Route de test
+app.get('/', (req, res) => {
+    res.json({ message: 'Smart Farm API is running' });
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+// Démarrage du serveur
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
