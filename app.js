@@ -19,3 +19,7 @@ app.get('/', (req, res) => {
 app.listen(3000, () => {
     console.log('Server running on port 3000');
 });
+
+const stockRoutes = require("./routes/stock.routes");
+
+app.use("/api/stock", stockRoutes);
