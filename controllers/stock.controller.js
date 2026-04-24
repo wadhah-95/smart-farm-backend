@@ -1,36 +1,40 @@
-const Stock = require("../models/stock.model");
+let stocks = [
+  { id: 1, name: "Engrais", quantity: 10, unit: "kg" }
+];
 
 // CREATE
-exports.createStock = async (req, res) => {
-  try {
-    const stock = new Stock(req.body);
-    await stock.save();
-    res.status(201).json(stock);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+exports.createStock = (req, res) => {
+  const newStock = {
+    id: stocks.length + 1,
+    ...req.body
+  };
+  stocks.push(newStock);
+  res.status(201).json(newStock);
 };
 
-// READ ALL
-exports.getStocks = async (req, res) => {
-  const stocks = await Stock.find();
+// GET ALL
+exports.getStocks = (req, res) => {
   res.json(stocks);
 };
 
-// READ ONE
-exports.getStockById = async (req, res) => {
-  const stock = await Stock.findById(req.params.id);
+// GET ONE
+exports.getStockById = (req, res) => {
+  const stock = stocks.find(s => s.id == req.params.id);
+  if (!stock) return res.status(404).json({ message: "Not found" });
   res.json(stock);
 };
 
 // UPDATE
-exports.updateStock = async (req, res) => {
-  const stock = await Stock.findByIdAndUpdate(req.params.id, req.body, { new: true });
+exports.updateStock = (req, res) => {
+  const stock = stocks.find(s => s.id == req.params.id);
+  if (!stock) return res.status(404).json({ message: "Not found" });
+
+  Object.assign(stock, req.body);
   res.json(stock);
 };
 
 // DELETE
-exports.deleteStock = async (req, res) => {
-  await Stock.findByIdAndDelete(req.params.id);
+exports.deleteStock = (req, res) => {
+  stocks = stocks.filter(s => s.id != req.params.id);
   res.json({ message: "Deleted" });
 };

@@ -1,25 +1,22 @@
 const express = require('express');
 const app = express();
 
-// importer les routes
+// routes
 const farmRoutes = require('./routes/farm.routes');
+const stockRoutes = require('./routes/stock.routes');
 
-// middleware
 app.use(express.json());
 
-// utiliser les routes
+// routes
 app.use('/api', farmRoutes);
+app.use('/api/stock', stockRoutes);
 
-// route test
+// test
 app.get('/', (req, res) => {
-    res.send('API is running');
+  res.send('API is running');
 });
 
-// lancer serveur
+// serveur
 app.listen(3000, () => {
-    console.log('Server running on port 3000');
+  console.log('Server running on port 3000');
 });
-
-const stockRoutes = require("./routes/stock.routes");
-
-app.use("/api/stock", stockRoutes);
